@@ -615,6 +615,17 @@ void DecodeFromGBuffer(uint2 positionSS, uint featureFlags, out BSDFData bsdfDat
 
 void DecodeFromGBuffer(uint2 positionSS, uint featureFlags, out BSDFData bsdfData, out float3 bakeDiffuseLighting)
 {
+#if SHADER_STAGE_COMPUTE && defined (HAS_LIGHTLOOP)
+    // Handle the worst case (catch all) of tile classification
+    // Note: Work because we don't call deferred compute for cluster, if we do it, we need to update this code (to have correct cluster size)
+    if (featureFlags & (LIGHT_FEATURE_MASK_FLAGS_OPAQUE | MATERIAL_FEATURE_MASK_FLAGS) == 0)
+    {
+        uint numTileX = (_ScreenSize.x + (TILE_SIZE_FPTL - 1)) / TILE_SIZE_FPTL;
+        uint index = (positionSS.y / TILE_SIZE_FPTL) * numTileX + (positionSS.x / TILE_SIZE_FPTL);
+        featureFlags = g_TileFeatureFlags[index];
+    }
+#endif
+
     uint unsused;
     DecodeFromGBuffer(positionSS, featureFlags, bsdfData, bakeDiffuseLighting, unsused);
 }

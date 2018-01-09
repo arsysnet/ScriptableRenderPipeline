@@ -28,6 +28,10 @@ uint _NumTileClusteredX;
 uint _NumTileClusteredY;
 CBUFFER_END
 
+#if SHADER_STAGE_COMPUTE
+StructuredBuffer<uint> g_TileFeatureFlags;
+#endif
+
 StructuredBuffer<uint> g_vLayeredOffsetsBuffer;     // don't support Buffer yet in unity
 StructuredBuffer<float> g_logBaseBuffer;            // don't support Buffer yet in unity
 //#endif
