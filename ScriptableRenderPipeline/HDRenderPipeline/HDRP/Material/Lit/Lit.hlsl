@@ -564,7 +564,7 @@ void DecodeFromGBuffer(uint2 positionSS, uint featureFlags, out BSDFData bsdfDat
 
         if (HasMaterialFeatureFlag(bsdfData.materialFeatures, MATERIALFEATUREFLAGS_LIT_TRANSMISSION))
         {
-            FillMaterialTransmission(inGBuffer0.g, bsdfData);
+            FillMaterialTransmission(inGBuffer2.g, bsdfData);
         }
     }
 
@@ -888,7 +888,7 @@ LightTransportData GetLightTransportData(SurfaceData surfaceData, BuiltinData bu
 
 bool HaveSubsurfaceScattering(BSDFData bsdfData)
 {
-    return (_EnableSubsurfaceScattering != 0) && HasMaterialFeatureFlag(bsdfData.materialFeatures, MATERIALFEATUREFLAGS_LIT_SUBSURFACE_SCATTERING);
+    return HasMaterialFeatureFlag(bsdfData.materialFeatures, MATERIALFEATUREFLAGS_LIT_SUBSURFACE_SCATTERING);
 }
 
 //-----------------------------------------------------------------------------
